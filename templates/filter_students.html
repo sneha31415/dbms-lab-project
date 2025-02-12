@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Filter Students by Email Domain</h2>
+
+<!-- {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="alert alert-danger">
+            {% for category, message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %} -->
+
+<form action="/filter_students" method="POST">
+    <label for="email_domain">Enter Email Domain (e.g., @vjti.ac.in):</label>
+    <input type="text" name="email_domain" class="form-control" placeholder="Enter email domain" required><br>
+    <button type="submit" class="btn btn-primary">Filter Students</button>
+</form>
+
+{% if students %}
+    <h3>Filtered Students</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Enrollment Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student[0] }}</td>
+                <td>{{ student[1] }}</td>
+                <td>{{ student[2] }}</td>
+                <td>{{ student[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}

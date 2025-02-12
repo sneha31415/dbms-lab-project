@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add New Student</h2>
+<form action="/add_student" method="post">
+    <input type="text" name="name" placeholder="Name" class="form-control" required><br>
+    <input type="email" name="email" placeholder="Email" class="form-control" required><br>
+    <input type="date" name="enrollment_date" class="form-control" required><br>
+    
+    <h4>Select Courses:</h4>
+    {% for course in courses %}
+        <div>
+            <input type="checkbox" name="courses" value="{{ course[0] }}"> {{ course[1] }}
+        </div>
+    {% endfor %}
+    <br>
+    <button type="submit" class="btn btn-primary">Add Student</button>
+</form>
+{% endblock %}

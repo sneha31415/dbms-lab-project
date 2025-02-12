@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Students</h2>
+
+<form method="get" action="/view_students">
+    <div class="row">
+        <div class="col">
+            <input type="number" name="roll_from" placeholder="From Roll Number" class="form-control" required>
+        </div>
+        <div class="col">
+            <input type="number" name="roll_to" placeholder="To Roll Number" class="form-control" required>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
+<br>
+
+<!-- Students Table -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Enrollment Date</th>
+            <th>Courses</th>
+            <th>Actions</th> <!-- Added Actions column -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student[0] }}</td>
+            <td>{{ student[1] }}</td>
+            <td>{{ student[2] }}</td>
+            <td>{{ student[3] }}</td>
+            <td>
+                {% for course in student_courses[student[0]] %}
+                {{ course[0] }}<br>
+                {% endfor %}
+            </td>
+            <td>
+                <!-- Delete button -->
+                <form method="post" action="/delete_student" style="display:inline;">
+                    <input type="hidden" name="student_id" value="{{ student[0] }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add New Course</h2>
+<form action="/add_course" method="post">
+    <input type="text" name="course_name" placeholder="Course Name" class="form-control" required><br>
+    <textarea name="course_desc" placeholder="Course Description" class="form-control" required></textarea><br>
+    <button type="submit" class="btn btn-primary">Add Course</button>
+</form>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align: center; margin-top: 5px;">
+    <h1 style="font-size: 3.5em; font-weight: bold;">Welcome to Studentify...</h1>
+    <p style="font-size: 1.5em; margin-top: 10px;">Manage students and courses easily!</p>
+    <img src="{{ url_for('static', filename='assests/pngwing.com.png') }}" alt="Student Management" 
+         style="margin-top: 0px; width: 50%; height: auto; border-radius: 10px;">
+</div>
+{% endblock %}
