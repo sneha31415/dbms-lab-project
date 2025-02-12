@@ -18,6 +18,27 @@
 
 <br>
 
+<!-- ===================================================== -->
+<!-- Group By Course Form -->
+<form method="get" action="/view_students">
+    <div class="row">
+        <div class="col">
+            <select name="group_by_course" class="form-control">
+                <option value="">Select Course</option>
+                {% for course in courses %}
+                <option value="{{ course[0] }}">{{ course[0] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-info">Group By Course</button>
+        </div>
+    </div>
+</form>
+
+<!-- ===================================================== -->
+
+
 <!-- Students Table -->
 <table class="table table-striped">
     <thead>

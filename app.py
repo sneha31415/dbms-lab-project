@@ -75,16 +75,29 @@ def add_course():
 def view_students():
     roll_from = request.args.get('roll_from', type=int)
     roll_to = request.args.get('roll_to', type=int)
+    group_by_course = request.args.get('group_by_course')
 
     cursor = mysql.connection.cursor()
 
-    if roll_from is not None and roll_to is not None:
-        cursor.execute('''
+    if group_by_course:
+        query = '''
+            SELECT s.StudentID, s.Name, s.Email, s.EnrollmentDate 
+            FROM Students s
+            INNER JOIN StudentCourses sc ON s.StudentID = sc.StudentID
+            INNER JOIN Courses c ON sc.CourseID = c.CourseID
+            WHERE c.CourseName = %s
+            GROUP BY s.StudentID, s.Name, s.Email, s.EnrollmentDate
+        '''
+        cursor.execute(query, (group_by_course,))
+    elif roll_from is not None and roll_to is not None:
+        query = '''
             SELECT * FROM Students
             WHERE StudentID BETWEEN %s AND %s
-        ''', (roll_from, roll_to))
+        '''
+        cursor.execute(query, (roll_from, roll_to))
     else:
-        cursor.execute('SELECT * FROM Students')
+        query = 'SELECT * FROM Students'
+        cursor.execute(query)
 
     students = cursor.fetchall()
 
@@ -99,8 +112,11 @@ def view_students():
         courses = cursor.fetchall()
         student_courses[student_id] = courses
 
-    return render_template('view_students.html', students=students, student_courses=student_courses)
+    # Fetch available courses for the dropdown
+    cursor.execute('SELECT CourseName FROM Courses')
+    courses = cursor.fetchall()
 
+    return render_template('view_students.html', students=students, student_courses=student_courses, courses=courses)
 
 
 @app.route('/get_student', methods=['GET', 'POST'])
