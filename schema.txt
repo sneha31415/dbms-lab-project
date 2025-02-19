@@ -26,3 +26,12 @@ CREATE INDEX idx_email ON Students(Email);
 
 USE student_management;
 SELECT * FROM Courses;
+
+DELIMITER //
+
+CREATE PROCEDURE AddCourse(IN course_name VARCHAR(255), IN course_desc TEXT)
+BEGIN
+    INSERT INTO Courses (CourseName, CourseDescription) VALUES (course_name, course_desc);
+END //
+
+DELIMITER ;

@@ -58,17 +58,32 @@ def add_student():
     return render_template('add_student.html', courses=courses)
 
 # -----------------------------------------
+# @app.route('/add_course', methods=['GET', 'POST'])
+# def add_course():
+#     if request.method == 'POST':
+#         course_name = request.form['course_name']
+#         course_desc = request.form['course_desc']
+#         cursor = mysql.connection.cursor()
+#         cursor.execute('INSERT INTO Courses (CourseName, CourseDescription) VALUES (%s, %s)',
+#                        (course_name, course_desc))
+#         mysql.connection.commit()
+#         return redirect('/')
+#     return render_template('add_course.html')
+
 @app.route('/add_course', methods=['GET', 'POST'])
 def add_course():
     if request.method == 'POST':
         course_name = request.form['course_name']
         course_desc = request.form['course_desc']
+        
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO Courses (CourseName, CourseDescription) VALUES (%s, %s)',
-                       (course_name, course_desc))
+        cursor.callproc('AddCourse', (course_name, course_desc))
         mysql.connection.commit()
+        
         return redirect('/')
+    
     return render_template('add_course.html')
+
 
 # ----------------------------------------------
 @app.route('/view_students', methods=['GET'])
