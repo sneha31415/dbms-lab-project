@@ -1,0 +1,28 @@
+-- CREATE DATABASE IF NOT EXISTS student_management;
+
+-- CREATE TABLE IF NOT EXISTS Students (
+--     StudentID INT AUTO_INCREMENT PRIMARY KEY,
+--     Name VARCHAR(255) NOT NULL,
+--     Email VARCHAR(255) UNIQUE NOT NULL,
+--     EnrollmentDate DATE NOT NULL
+-- );
+
+-- CREATE TABLE IF NOT EXISTS Courses (
+--     CourseID INT AUTO_INCREMENT PRIMARY KEY,
+--     CourseName VARCHAR(255) NOT NULL,
+--     CourseDescription TEXT
+-- );
+
+-- CREATE TABLE IF NOT EXISTS StudentCourses (
+--     ID INT AUTO_INCREMENT PRIMARY KEY,
+--     StudentID INT NOT NULL,
+--     CourseID INT NOT NULL, 
+--     FOREIGN KEY (StudentID) REFERENCES Students(StudentID) ON DELETE CASCADE,
+--     FOREIGN KEY (CourseID) REFERENCES Courses(CourseID) ON DELETE CASCADE,
+--     UNIQUE (StudentID, CourseID)
+-- );
+
+CREATE INDEX idx_email ON Students(Email);
+
+USE student_management;
+SELECT * FROM Courses;
