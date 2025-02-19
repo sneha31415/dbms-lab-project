@@ -27,11 +27,44 @@ CREATE INDEX idx_email ON Students(Email);
 USE student_management;
 SELECT * FROM Courses;
 
+
+-- for stored procedure 
 DELIMITER //
 
 CREATE PROCEDURE AddCourse(IN course_name VARCHAR(255), IN course_desc TEXT)
 BEGIN
-    INSERT INTO Courses (CourseName, CourseDescription) VALUES (course_name, course_desc);
+INSERT INTO Courses (CourseName, CourseDescription) VALUES (course_name, course_desc);
 END //
 
 DELIMITER ;
+--  -----------
+
+
+
+
+-- table to store trigger logs 
+-- CREATE TABLE Course_Audit (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     course_id INT,
+--     course_name VARCHAR(255),
+--     action VARCHAR(50),
+--     action_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
+
+
+DELIMITER //
+
+CREATE TRIGGER after_course_insert
+AFTER INSERT ON Courses
+FOR EACH ROW
+BEGIN
+    INSERT INTO Course_Audit (course_id, course_name, action)
+    VALUES (NEW.CourseID, NEW.CourseName, 'INSERTED');
+END;
+//
+
+DELIMITER ;
+
+SELECT * FROM Course_Audit;
+
+
