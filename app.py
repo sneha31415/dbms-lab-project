@@ -169,13 +169,50 @@ def get_student():
 #     cursor.execute(query)
 #     summary = cursor.fetchall()
 #     return render_template('course_summary.html', summary=summary)
+# @app.route('/course_summary')
+# def course_summary():
+#     cursor = mysql.connection.cursor()
+    
+#     # Query to get course-wise student count
+#     query_summary = '''
+#     SELECT c.CourseName, COUNT(sc.StudentID) AS TotalStudents
+#     FROM Courses c
+#     LEFT JOIN StudentCourses sc ON c.CourseID = sc.CourseID
+#     GROUP BY c.CourseID, c.CourseName
+#     '''
+#     cursor.execute(query_summary)
+#     summary = cursor.fetchall()
+
+#     # Query to get min, max, sum, avg
+#     query_aggregates = '''
+#     SELECT 
+#         MIN(StudentCount) AS MinStudents,
+#         MAX(StudentCount) AS MaxStudents,
+#         SUM(StudentCount) AS TotalStudents,
+#         AVG(StudentCount) AS AvgStudents
+#     FROM (
+#         SELECT COUNT(sc.StudentID) AS StudentCount
+#         FROM Courses c
+#         LEFT JOIN StudentCourses sc ON c.CourseID = sc.CourseID
+#         GROUP BY c.CourseID
+#     ) AS CourseCounts
+#     '''
+#     cursor.execute(query_aggregates)
+#     aggregates = cursor.fetchone()
+
+#     return render_template('course_summary.html', summary=summary, aggregates=aggregates)
+
+
 @app.route('/course_summary')
 def course_summary():
     cursor = mysql.connection.cursor()
     
-    # Query to get course-wise student count
+    # Query to get course-wise student count with ranking
     query_summary = '''
-    SELECT c.CourseName, COUNT(sc.StudentID) AS TotalStudents
+    SELECT 
+        c.CourseName, 
+        COUNT(sc.StudentID) AS TotalStudents,
+        DENSE_RANK() OVER (ORDER BY COUNT(sc.StudentID) DESC) AS `Rank`
     FROM Courses c
     LEFT JOIN StudentCourses sc ON c.CourseID = sc.CourseID
     GROUP BY c.CourseID, c.CourseName
@@ -183,7 +220,7 @@ def course_summary():
     cursor.execute(query_summary)
     summary = cursor.fetchall()
 
-    # Query to get min, max, sum, avg
+    # Query to get min, max, sum, avg of student count per course
     query_aggregates = '''
     SELECT 
         MIN(StudentCount) AS MinStudents,
@@ -201,6 +238,8 @@ def course_summary():
     aggregates = cursor.fetchone()
 
     return render_template('course_summary.html', summary=summary, aggregates=aggregates)
+
+
 
 
 # --------------------------------------------------------
